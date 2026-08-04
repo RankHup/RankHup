@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RankHUP - Random Joke</title>
+<style>
+  :root {
+    --pink: #ff2d6d;
+    --pink-soft: #ff2d6d55;
+    --yellow: #ffcc33;
+    --bg: #000;
+    --card-bg: #0d0d0d;
+    --border: #1a1a1a;
+    --border-soft: #2a2a2a;
+    --text-muted: #999;
+    --text-faint: #777;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; overflow:hidden; }
+  body {
+    background:var(--bg);
+    color:#fff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 16px;
+  }
+
+  /* Header */
+  header {
+    width:100%;
+    max-width:1024px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:6px 16px;
+    border-bottom:1px solid var(--border);
+    flex-shrink:0;
+  }
+  .logo { display:flex; align-items:center; gap:8px; }
+  .logo-icon { font-size:20px; }
+  .logo-block { display:flex; flex-direction:column; }
+  .logo-text { font-size:18px; font-weight:800; }
+  .logo-text .rank { color:#fff; }
+  .logo-text .hup { color:var(--pink); }
+  .tagline { font-size:9px; color:var(--text-muted); margin-top:-2px; }
+
+  .new-joke-btn {
+    display:flex; align-items:center; gap:6px;
+    color:#fff; font-weight:600; font-size:12px;
+    cursor:pointer; user-select:none;
+    background:none; border:none;
+  }
+  .new-joke-btn svg { width:14px; height:14px; }
+
+  /* Hero */
+  .hero { text-align:center; padding:6px 20px; flex-shrink:0; }
+  .hero h1 { font-size:clamp(18px, 3.2vh, 28px); font-weight:800; }
+  .hero h1 .emoji { margin-right:6px; }
+  .hero h1 .accent { color:var(--pink); }
+  .hero p { color:var(--text-muted); margin-top:4px; font-size:clamp(10px, 1.4vh, 13px); }
+  .underline {
+    width:44px; height:3px; background:var(--pink);
+    margin:8px auto 0; border-radius:2px;
+  }
+
+  /* Joke Card */
+  .joke-card {
+    width:90%; max-width:900px;
+    background:var(--card-bg);
+    border:1px solid var(--pink-soft);
+    border-radius:16px;
+    padding:clamp(10px,2vh,24px) clamp(16px,3vw,40px);
+    text-align:center;
+    box-shadow: 0 0 30px rgba(255,45,109,0.05);
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-height:0;
+    overflow:hidden;
+  }
+  .quote-mark { font-size:clamp(20px,3vh,32px); color:var(--pink); font-weight:800; line-height:1; }
+  .setup { font-size:clamp(16px, 2.8vh, 26px); font-weight:800; margin-top:6px; line-height:1.25; }
+  .divider { width:44px; height:2px; background:var(--pink-soft); margin:clamp(8px,1.6vh,16px) auto; }
+  .punchline { font-size:clamp(14px, 2.4vh, 22px); font-weight:800; color:var(--yellow); line-height:1.25; }
+
+  .actions {
+    display:flex; gap:10px; justify-content:center;
+    margin-top:clamp(10px,2vh,20px);
+    flex-wrap:wrap;
+  }
+  .btn {
+    display:flex; align-items:center; gap:6px;
+    padding:clamp(8px,1.4vh,12px) 18px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:clamp(11px,1.6vh,14px);
+    border:none;
+    cursor:pointer;
+    transition:transform .15s ease, filter .15s ease;
+  }
+  .btn:hover { filter:brightness(1.1); transform:translateY(-2px); }
+  .btn-funny { background:#1db954; color:#fff; }
+  .btn-not-funny { background:var(--pink); color:#fff; }
+  .btn-next { background:#1a1a1a; color:#fff; border:1px solid var(--border-soft); }
+  .btn svg { width:14px; height:14px; }
+
+  .stats { margin-top:clamp(8px,1.6vh,16px); color:var(--text-muted); font-size:clamp(10px,1.4vh,13px); }
+  .stats .percent { color:var(--pink); font-weight:700; }
+  .vote-count { color:#666; font-size:clamp(9px,1.1vh,11px); margin-top:2px; }
+
+  /* Ad box */
+  .ad-box {
+    width:90%; max-width:900px;
+    border:1.5px dashed var(--border-soft);
+    border-radius:12px;
+    padding:8px 16px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    flex-shrink:0;
+  }
+  .ad-icon {
+    width:30px; height:30px;
+    background:linear-gradient(135deg,#ff5722,var(--pink));
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:16px; color:#fff;
+  }
+  .ad-text { text-align:left; line-height:1.2; }
+  .ad-text .by { font-size:9px; color:#888; letter-spacing:1px; }
+  .ad-text .name { font-size:12px; font-weight:800; }
+
+  footer {
+    color:var(--text-faint);
+    font-size:11px;
+    display:flex; align-items:center; gap:5px;
+    flex-shrink:0;
+    padding-top:4px;
+  }
+  footer .heart { color:var(--pink); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-icon">👑</span>
+    <div class="logo-block">
+      <div class="logo-text"><span class="rank">Rank</span><span class="hup">HUP</span></div>
+      <div class="tagline">Laugh More. Live Better.</div>
+    </div>
+  </div>
+  <button class="new-joke-btn" id="newJokeBtn" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+    New Joke
+  </button>
+</header>
+
+<section class="hero">
+  <h1><span class="emoji">😂</span>Random <span class="accent">Joke</span></h1>
+  <p>A new joke every time you click!</p>
+  <div class="underline"></div>
+</section>
+
+<div class="joke-card">
+  <div class="quote-mark">&#8220;</div>
+  <div class="setup" id="setup">Why don't skeletons fight each other?</div>
+  <div class="divider"></div>
+  <div class="punchline" id="punchline">Because they don't have the guts.</div>
+
+  <div class="actions">
+    <button class="btn btn-funny" id="funnyBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M2 21h4V9H2v12zm20-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L13.17 1 7.59 6.59C7.22 6.95 7 7.45 7 8v11c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+      Funny
+    </button>
+    <button class="btn btn-not-funny" id="notFunnyBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M22 3h-4v12h4V3zM2 14c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L10.83 23l5.58-5.59c.37-.36.59-.86.59-1.41V5c0-1.1-.9-2-2-2H5.83c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2z"/></svg>
+      Not Funny
+    </button>
+    <button class="btn btn-next" id="nextJokeBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="white"><path d="M17 3H7c-1.1 0-2 .9-2 2v14l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+      Next Joke
+    </button>
+  </div>
+
+  <div class="stats">
+    <span class="funny-heart">❤️</span> <span class="percent" id="percent">92%</span> found this funny
+  </div>
+  <div class="vote-count" id="votes">187,543 votes</div>
+</div>
+
+<div class="ad-box">
+  <script>
+    atOptions = {
+      'key' : '64ddfcd1b7ccd7b892af5a4465b650ae',
+      'format' : 'iframe',
+      'height' : 250,
+      'width' : 300,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/64ddfcd1b7ccd7b892af5a4465b650ae/invoke.js"></script>
+</div>
+
+<footer>
+  Made with <span class="heart">❤️</span> for laughter
+</footer>
+
+<script>
+(function () {
+  const JOKES = [
+    ["Why don't skeletons fight each other?", "Because they don't have the guts."],
+    ["Why did the scarecrow win an award?", "Because he was outstanding in his field."],
+    ["Why don't eggs tell jokes?", "They'd crack each other up."],
+    ["What do you call fake spaghetti?", "An impasta."],
+    ["Why did the bicycle fall over?", "It was two-tired."],
+    ["Why can't you give Elsa a balloon?", "She'll let it go."],
+    ["What do you call a bear with no teeth?", "A gummy bear."],
+    ["Why did the coffee file a police report?", "It got mugged."],
+    ["Why don't scientists trust atoms?", "Because they make up everything."],
+    ["What do you call a fish with no eyes?", "A fsh."]
+  ];
+
+  const setupEl = document.getElementById('setup');
+  const punchlineEl = document.getElementById('punchline');
+  const percentEl = document.getElementById('percent');
+  const votesEl = document.getElementById('votes');
+
+  let lastIndex = -1;
+
+  function randomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  function pickNextJokeIndex() {
+    if (JOKES.length === 1) return 0;
+    let index;
+    do {
+      index = randomInt(0, JOKES.length - 1);
+    } while (index === lastIndex);
+    return index;
+  }
+
+  function updateStats() {
+    const percent = randomInt(80, 99);
+    const votes = randomInt(10000, 209999);
+    percentEl.textContent = percent + '%';
+    votesEl.textContent = votes.toLocaleString() + ' votes';
+  }
+
+  function showJoke(index) {
+    const [setup, punchline] = JOKES[index];
+    setupEl.textContent = setup;
+    punchlineEl.textContent = punchline;
+    updateStats();
+    lastIndex = index;
+  }
+
+  function loadJoke() {
+    showJoke(pickNextJokeIndex());
+  }
+
+  function vote() {
+    // Voting simply advances to a new joke; hook up real tracking here later.
+    loadJoke();
+  }
+
+  document.getElementById('newJokeBtn').addEventListener('click', loadJoke);
+  document.getElementById('nextJokeBtn').addEventListener('click', loadJoke);
+  document.getElementById('funnyBtn').addEventListener('click', () => vote(true));
+  document.getElementById('notFunnyBtn').addEventListener('click', () => vote(false));
+})();
+</script>
+
+</body>
+</html>
