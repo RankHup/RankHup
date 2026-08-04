@@ -18,129 +18,122 @@
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { height:100%; overflow:hidden; }
+  html { min-height: 100%; background: var(--bg); }
   body {
     background:var(--bg);
     color:#fff;
     font-family: 'Segoe UI', Arial, sans-serif;
-    height:100vh;
+    min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
-    justify-content:space-between;
-    padding:10px 16px;
+    padding:10px 12px;
+    gap: 12px;
   }
 
   /* Header */
   header {
     width:100%;
-    max-width:1024px;
+    max-width:900px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:6px 16px;
+    padding:6px 12px;
     border-bottom:1px solid var(--border);
     flex-shrink:0;
   }
   .logo { display:flex; align-items:center; gap:8px; }
-  .logo-icon { font-size:20px; }
+  .logo-icon { font-size:18px; }
   .logo-block { display:flex; flex-direction:column; }
-  .logo-text { font-size:18px; font-weight:800; }
+  .logo-text { font-size:16px; font-weight:800; }
   .logo-text .rank { color:#fff; }
   .logo-text .hup { color:var(--pink); }
-  .tagline { font-size:9px; color:var(--text-muted); margin-top:-2px; }
+  .tagline { font-size:8px; color:var(--text-muted); margin-top:-2px; }
 
   .new-joke-btn {
     display:flex; align-items:center; gap:6px;
-    color:#fff; font-weight:600; font-size:12px;
+    color:#fff; font-weight:600; font-size:11px;
     cursor:pointer; user-select:none;
     background:none; border:none;
   }
-  .new-joke-btn svg { width:14px; height:14px; }
+  .new-joke-btn svg { width:13px; height:13px; }
 
   /* Hero */
-  .hero { text-align:center; padding:6px 20px; flex-shrink:0; }
-  .hero h1 { font-size:clamp(18px, 3.2vh, 28px); font-weight:800; }
-  .hero h1 .emoji { margin-right:6px; }
+  .hero { text-align:center; padding:2px 10px; flex-shrink:0; }
+  .hero h1 { font-size:clamp(16px, 2.5vh, 22px); font-weight:800; }
+  .hero h1 .emoji { margin-right:4px; }
   .hero h1 .accent { color:var(--pink); }
-  .hero p { color:var(--text-muted); margin-top:4px; font-size:clamp(10px, 1.4vh, 13px); }
+  .hero p { color:var(--text-muted); margin-top:2px; font-size:11px; }
   .underline {
-    width:44px; height:3px; background:var(--pink);
-    margin:8px auto 0; border-radius:2px;
+    width:36px; height:2px; background:var(--pink);
+    margin:4px auto 0; border-radius:2px;
   }
 
   /* Joke Card */
   .joke-card {
-    width:90%; max-width:900px;
+    width:100%; max-width:900px;
     background:var(--card-bg);
     border:1px solid var(--pink-soft);
-    border-radius:16px;
-    padding:clamp(10px,2vh,24px) clamp(16px,3vw,40px);
+    border-radius:14px;
+    padding:16px 20px;
     text-align:center;
-    box-shadow: 0 0 30px rgba(255,45,109,0.05);
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    min-height:0;
-    overflow:hidden;
+    box-shadow: 0 0 20px rgba(255,45,109,0.05);
+    flex-shrink: 0;
   }
-  .quote-mark { font-size:clamp(20px,3vh,32px); color:var(--pink); font-weight:800; line-height:1; }
-  .setup { font-size:clamp(16px, 2.8vh, 26px); font-weight:800; margin-top:6px; line-height:1.25; }
-  .divider { width:44px; height:2px; background:var(--pink-soft); margin:clamp(8px,1.6vh,16px) auto; }
-  .punchline { font-size:clamp(14px, 2.4vh, 22px); font-weight:800; color:var(--yellow); line-height:1.25; }
+  .quote-mark { font-size:24px; color:var(--pink); font-weight:800; line-height:1; }
+  .setup { font-size:clamp(15px, 2.2vh, 22px); font-weight:800; margin-top:4px; line-height:1.3; }
+  .divider { width:36px; height:2px; background:var(--pink-soft); margin:10px auto; }
+  .punchline { font-size:clamp(13px, 2vh, 19px); font-weight:800; color:var(--yellow); line-height:1.3; }
 
   .actions {
-    display:flex; gap:10px; justify-content:center;
-    margin-top:clamp(10px,2vh,20px);
+    display:flex; gap:8px; justify-content:center;
+    margin-top:14px;
     flex-wrap:wrap;
   }
   .btn {
-    display:flex; align-items:center; gap:6px;
-    padding:clamp(8px,1.4vh,12px) 18px;
-    border-radius:10px;
+    display:flex; align-items:center; gap:5px;
+    padding:8px 14px;
+    border-radius:8px;
     font-weight:700;
-    font-size:clamp(11px,1.6vh,14px);
+    font-size:12px;
     border:none;
     cursor:pointer;
     transition:transform .15s ease, filter .15s ease;
   }
-  .btn:hover { filter:brightness(1.1); transform:translateY(-2px); }
+  .btn:hover { filter:brightness(1.1); transform:translateY(-1px); }
   .btn-funny { background:#1db954; color:#fff; }
   .btn-not-funny { background:var(--pink); color:#fff; }
   .btn-next { background:#1a1a1a; color:#fff; border:1px solid var(--border-soft); }
-  .btn svg { width:14px; height:14px; }
+  .btn svg { width:13px; height:13px; }
 
-  .stats { margin-top:clamp(8px,1.6vh,16px); color:var(--text-muted); font-size:clamp(10px,1.4vh,13px); }
+  .stats { margin-top:10px; color:var(--text-muted); font-size:11px; }
   .stats .percent { color:var(--pink); font-weight:700; }
-  .vote-count { color:#666; font-size:clamp(9px,1.1vh,11px); margin-top:2px; }
+  .vote-count { color:#666; font-size:10px; margin-top:2px; }
 
-  /* Ad box */
+  /* Ad boxes */
   .ad-box {
-    width:90%; max-width:900px;
+    width:100%; max-width:900px;
     border:1.5px dashed var(--border-soft);
-    border-radius:12px;
-    padding:8px 16px;
-    display:flex; align-items:center; justify-content:center; gap:10px;
-    flex-shrink:0;
-  }
-  .ad-icon {
-    width:30px; height:30px;
-    background:linear-gradient(135deg,#ff5722,var(--pink));
-    border-radius:8px;
+    border-radius:10px;
+    padding:6px;
     display:flex; align-items:center; justify-content:center;
-    font-weight:900; font-size:16px; color:#fff;
+    flex-shrink:0;
+    overflow: hidden;
   }
-  .ad-text { text-align:left; line-height:1.2; }
-  .ad-text .by { font-size:9px; color:#888; letter-spacing:1px; }
-  .ad-text .name { font-size:12px; font-weight:800; }
+  
+  .ad-top-banner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+  }
 
   footer {
     color:var(--text-faint);
-    font-size:11px;
-    display:flex; align-items:center; gap:5px;
+    font-size:10px;
+    display:flex; align-items:center; gap:4px;
     flex-shrink:0;
-    padding-top:4px;
+    padding:4px 0;
   }
   footer .heart { color:var(--pink); }
 </style>
@@ -160,6 +153,20 @@
     New Joke
   </button>
 </header>
+
+<!-- بانر 728x90 في الأعلى -->
+<div class="ad-top-banner">
+  <script>
+    atOptions = {
+      'key' : 'b6bfa43a7206c5d291664e8981cd4c78',
+      'format' : 'iframe',
+      'height' : 90,
+      'width' : 728,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/b6bfa43a7206c5d291664e8981cd4c78/invoke.js"></script>
+</div>
 
 <section class="hero">
   <h1><span class="emoji">😂</span>Random <span class="accent">Joke</span></h1>
@@ -194,6 +201,7 @@
   <div class="vote-count" id="votes">187,543 votes</div>
 </div>
 
+<!-- بانر 300x250 -->
 <div class="ad-box">
   <script>
     atOptions = {
@@ -210,6 +218,9 @@
 <footer>
   Made with <span class="heart">❤️</span> for laughter
 </footer>
+
+<!-- كود Social Bar -->
+<script src="https://pl30686433.effectivecpmnetwork.com/fb/01/c3/fb01c37319b39461843a862a665707f0.js"></script>
 
 <script>
 (function () {
@@ -266,7 +277,6 @@
   }
 
   function vote() {
-    // Voting simply advances to a new joke; hook up real tracking here later.
     loadJoke();
   }
 
