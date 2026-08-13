@@ -1,382 +1,511 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RankHUP - Random Joke</title>
-<style>
-  :root {
-    --pink: #ff2d6d;
-    --pink-soft: #ff2d6d55;
-    --yellow: #ffcc33;
-    --bg: #000;
-    --card-bg: #0d0d0d;
-    --border: #1a1a1a;
-    --border-soft: #2a2a2a;
-    --text-muted: #999;
-    --text-faint: #777;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download The Housemaid PDF Edition</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { min-height: 100%; background: var(--bg); }
-  body {
-    background:var(--bg);
-    color:#fff;
-    font-family: 'Segoe UI', Arial, sans-serif;
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:10px 12px;
-    gap: 12px;
-  }
+        body {
+            background-color: #0b0b0b;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
 
-  /* Header */
-  header {
-    width:100%;
-    max-width:900px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:6px 12px;
-    border-bottom:1px solid var(--border);
-    flex-shrink:0;
-  }
-  .logo { display:flex; align-items:center; gap:8px; }
-  .logo-icon { font-size:18px; }
-  .logo-block { display:flex; flex-direction:column; }
-  .logo-text { font-size:16px; font-weight:800; }
-  .logo-text .rank { color:#fff; }
-  .logo-text .hup { color:var(--pink); }
-  .tagline { font-size:8px; color:var(--text-muted); margin-top:-2px; }
+        .landing-container {
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+        }
 
-  .new-joke-btn {
-    display:flex; align-items:center; gap:6px;
-    color:#fff; font-weight:600; font-size:11px;
-    cursor:pointer; user-select:none;
-    background:none; border:none;
-  }
-  .new-joke-btn svg { width:13px; height:13px; }
+        /* Notification Popup Styles */
+        .notification {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(26, 26, 26, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            z-index: 1000;
+            transition: top 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s ease;
+            opacity: 0;
+            width: max-content;
+            max-width: 90vw;
+            backdrop-filter: blur(10px);
+        }
 
-  /* Hero */
-  .hero { text-align:center; padding:2px 10px; flex-shrink:0; }
-  .hero h1 { font-size:clamp(16px, 2.5vh, 22px); font-weight:800; }
-  .hero h1 .emoji { margin-right:4px; }
-  .hero h1 .accent { color:var(--pink); }
-  .hero p { color:var(--text-muted); margin-top:2px; font-size:11px; }
-  .underline {
-    width:36px; height:2px; background:var(--pink);
-    margin:4px auto 0; border-radius:2px;
-  }
+        .notification.show {
+            top: 20px;
+            opacity: 1;
+        }
 
-  /* Joke Card */
-  .joke-card {
-    width:100%; max-width:900px;
-    background:var(--card-bg);
-    border:1px solid var(--pink-soft);
-    border-radius:14px;
-    padding:16px 20px;
-    text-align:center;
-    box-shadow: 0 0 20px rgba(255,45,109,0.05);
-    flex-shrink: 0;
-  }
-  .quote-mark { font-size:24px; color:var(--pink); font-weight:800; line-height:1; }
-  .setup { font-size:clamp(15px, 2.2vh, 22px); font-weight:800; margin-top:4px; line-height:1.3; }
-  .divider { width:36px; height:2px; background:var(--pink-soft); margin:10px auto; }
-  
-  /* Punchline hidden by default */
-  .punchline { 
-    font-size:clamp(13px, 2vh, 19px); 
-    font-weight:800; 
-    color:var(--yellow); 
-    line-height:1.3; 
-    display: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  .punchline.visible {
-    display: block;
-    opacity: 1;
-  }
+        .notif-icon {
+            background-color: #2ecc71;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
 
-  .actions {
-    display:flex; gap:8px; justify-content:center;
-    margin-top:14px;
-    flex-wrap:wrap;
-  }
-  .btn {
-    display:flex; align-items:center; gap:5px;
-    padding:10px 20px;
-    border-radius:8px;
-    font-weight:700;
-    font-size:13px;
-    border:none;
-    cursor:pointer;
-    transition:transform .15s ease, filter .15s ease;
-  }
-  .btn:hover { filter:brightness(1.1); transform:translateY(-1px); }
-  .btn-reveal { background:var(--pink); color:#fff; width: 100%; max-width: 250px; justify-content: center; }
-  .btn-next { background:#1db954; color:#fff; display: none; width: 100%; max-width: 250px; justify-content: center; }
-  .btn svg { width:13px; height:13px; }
+        .notif-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #ffffff;
+        }
 
-  /* Ad boxes */
-  .ad-box {
-    width:100%; max-width:900px;
-    border:1.5px dashed var(--border-soft);
-    border-radius:10px;
-    padding:6px;
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
-    overflow: hidden;
-  }
-  
-  .ad-top-banner {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-shrink: 0;
-  }
+        .notif-content {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
 
-  footer {
-    color:var(--text-faint);
-    font-size:10px;
-    display:flex; align-items:center; gap:4px;
-    flex-shrink:0;
-    padding:4px 0;
-  }
-  footer .heart { color:var(--pink); }
-</style>
+        .notif-header {
+            font-size: 0.65rem;
+            color: #999;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 3px;
+        }
+
+        .notif-text {
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+
+        .notif-text strong {
+            color: #ffffff;
+        }
+
+        /* Header / Logo Section */
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .amazon-logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .amazon-logo span {
+            color: #ff9900;
+            font-size: 0.7rem;
+            align-self: flex-end;
+            margin-bottom: 4px;
+        }
+
+        .divider {
+            width: 1px;
+            height: 16px;
+            background-color: #333;
+        }
+
+        .digital-badge {
+            border: 1px solid #ff9900;
+            color: #ff9900;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Titles */
+        .main-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            line-height: 1.15;
+            text-transform: uppercase;
+        }
+
+        .main-title .orange {
+            color: #ff9900;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            max-width: 460px;
+            margin: 0 auto;
+        }
+
+        /* Main Card Container */
+        .main-card {
+            background: linear-gradient(180deg, rgba(26, 22, 18, 0.8) 0%, rgba(15, 15, 15, 0.9) 100%);
+            border: 1px solid #332211;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 0 40px rgba(255, 153, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+
+        /* Book Image Preview */
+        .book-preview {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #111;
+        }
+
+        .book-image {
+            width: 100%;
+            max-height: 380px;
+            object-fit: contain;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* Features List */
+        .features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+
+        .check-icon {
+            background-color: #ff9900;
+            color: #000;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Pricing & Status Footer inside Card */
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 16px;
+            margin-top: 4px;
+        }
+
+        .file-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: #2ecc71;
+            font-weight: 600;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #2ecc71;
+        }
+
+        .pricing {
+            text-align: right;
+        }
+
+        .old-price {
+            font-size: 0.8rem;
+            color: #777;
+            text-decoration: line-through;
+        }
+
+        .current-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #2ecc71;
+        }
+
+        /* Progress Bar Section */
+        .progress-container {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .copies-left {
+            color: #ff9900;
+        }
+
+        .claimed-text {
+            color: #777;
+        }
+
+        .progress-track {
+            background: #222;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .progress-fill {
+            background: #ff9900;
+            height: 100%;
+            width: 82%;
+            border-radius: 3px;
+        }
+
+        /* Steps List */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+            padding: 0 4px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+
+        .step-number {
+            background: rgba(255, 153, 0, 0.15);
+            color: #ff9900;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        /* Call To Action Button */
+        .cta-button {
+            background: linear-gradient(180deg, #ffaa00 0%, #e68a00 100%);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 153, 0, 0.3);
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            margin-top: 4px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 153, 0, 0.4);
+        }
+
+        .cta-button svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">
-    <span class="logo-icon">👑</span>
-    <div class="logo-block">
-      <div class="logo-text"><span class="rank">Rank</span><span class="hup">HUP</span></div>
-      <div class="tagline">Laugh More. Live Better.</div>
+    <!-- Notification Element -->
+    <div id="download-notification" class="notification">
+        <div class="notif-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+        </div>
+        <div class="notif-content">
+            <span class="notif-header">Recent Download</span>
+            <span class="notif-text"><strong id="notif-user">@chloe_official</strong> just unlocked the E-Book!</span>
+        </div>
     </div>
-  </div>
-  <button class="new-joke-btn" id="newJokeBtn" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-    New Joke
-  </button>
-</header>
 
-<!-- بانر 728x90 في الأعلى -->
-<div class="ad-top-banner">
-  <script>
-    atOptions = {
-      'key' : 'b6bfa43a7206c5d291664e8981cd4c78',
-      'format' : 'iframe',
-      'height' : 90,
-      'width' : 728,
-      'params' : {}
-    };
-  </script>
-  <script src="https://www.highperformanceformat.com/b6bfa43a7206c5d291664e8981cd4c78/invoke.js"></script>
-</div>
+    <div class="landing-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="amazon-logo">
+                amazon <span>■</span>
+            </div>
+            <div class="divider"></div>
+            <div class="digital-badge">Digital Edition</div>
+        </div>
 
-<section class="hero">
-  <h1><span class="emoji">😂</span>Random <span class="accent">Joke</span></h1>
-  <p>A new joke every time you click!</p>
-  <div class="underline"></div>
-</section>
+        <!-- Main Heading -->
+        <div>
+            <h1 class="main-title">
+                Download <span class="orange">The Housemaid</span><br>PDF Edition
+            </h1>
+            <p class="subtitle" style="margin-top: 10px;">
+                Get the #1 Sunday Times bestselling psychological thriller by Freida McFadden. Every uneasy secret, every shocking twist—uncover the truth behind closed doors.
+            </p>
+        </div>
 
-<div class="joke-card">
-  <div class="quote-mark">&#8220;</div>
-  <div class="setup" id="setup">Why don't skeletons fight each other?</div>
-  <div class="divider"></div>
-  <div class="punchline" id="punchline">Because they don't have the guts.</div>
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Book Image Preview -->
+            <div class="book-preview">
+                <img src="https://www.bookup.com.mx/cdn/shop/products/9781538742570_1d53c.jpg?v=1736577796" alt="The Housemaid Book Cover" class="book-image">
+            </div>
 
-  <div class="actions">
-    <button class="btn btn-reveal" id="revealBtn" type="button">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-      Tap for Answer
-    </button>
-    <button class="btn btn-next" id="nextJokeBtn" type="button">
-      <svg viewBox="0 0 24 24" fill="white"><path d="M17 3H7c-1.1 0-2 .9-2 2v14l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
-      Next Joke ➔
-    </button>
-  </div>
-</div>
+            <!-- Features List -->
+            <ul class="features-list">
+                <li>
+                    <div class="check-icon">✓</div>
+                    <span><strong>Full Uncut Edition:</strong> Complete psychological thriller</span>
+                </li>
+                <li>
+                    <div class="check-icon">✓</div>
+                    <span><strong>Gripping Suspense:</strong> Unputdownable plot twists</span>
+                </li>
+                <li>
+                    <div class="check-icon">✓</div>
+                    <span><strong>Universal Compatibility:</strong> iOS, Android, Kindle & PC</span>
+                </li>
+            </ul>
 
-<!-- بانر 300x250 -->
-<div class="ad-box">
-  <script>
-    atOptions = {
-      'key' : '64ddfcd1b7ccd7b892af5a4465b650ae',
-      'format' : 'iframe',
-      'height' : 250,
-      'width' : 300,
-      'params' : {}
-    };
-  </script>
-  <script src="https://www.highperformanceformat.com/64ddfcd1b7ccd7b892af5a4465b650ae/invoke.js"></script>
-</div>
+            <!-- File Status & Price -->
+            <div class="card-footer">
+                <div class="file-status">
+                    <div class="status-dot"></div>
+                    <span>Instant PDF Access</span>
+                </div>
+                <div class="pricing">
+                    <div class="old-price">£9.00</div>
+                    <div class="current-price">FREE</div>
+                </div>
+            </div>
+        </div>
 
-<footer>
-  Made with <span class="heart">❤️</span> for laughter
-</footer>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-labels">
+                <span class="copies-left">FREE DOWNLOADS LEFT: 18 COPIES</span>
+                <span class="claimed-text">82% CLAIMED</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
 
-<!-- كود Social Bar -->
-<script src="https://pl30686433.effectivecpmnetwork.com/fb/01/c3/fb01c37319b39461843a862a665707f0.js"></script>
+        <!-- Steps -->
+        <div class="steps-container">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div>Click the button below to start instant verification.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div>Complete <strong>ONE quick & simple offer</strong> to unlock the file link.</div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div>Your <strong>The Housemaid PDF</strong> download will start automatically!</div>
+            </div>
+        </div>
 
-<script>
-(function () {
-  const JOKES = [
-    ["Why don't skeletons fight each other?", "Because they don't have the guts."],
-    ["Why did the scarecrow win an award?", "Because he was outstanding in his field."],
-    ["What do you call a fake noodle?", "An impasta."],
-    ["Why did the bicycle fall over?", "Because it was two-tired."],
-    ["What do you call a bear with no teeth?", "A gummy bear."],
-    ["Why can't you explain puns to kleptomaniacs?", "Because they take things literally."],
-    ["What do you call cheese that isn't yours?", "Nacho cheese."],
-    ["Why did the math book look sad?", "Because it had too many problems."],
-    ["What do you call an alligator in a vest?", "An investigator."],
-    ["Why don't scientists trust atoms?", "Because they make up everything."],
-    ["What do you call a fish with no eyes?", "A fsh."],
-    ["Why did the cookie go to the hospital?", "Because it felt crummy."],
-    ["What do you call a sleeping dinosaur?", "A dino-snore."],
-    ["Why did the golfer bring two pairs of pants?", "In case he got a hole in one."],
-    ["What do you call a cow with no legs?", "Ground beef."],
-    ["What do you call a cow with two legs?", "Lean beef."],
-    ["What do you call a cow with all legs?", "High-steaks."],
-    ["Why did the mobile phone go to sleep?", "It lost its connection."],
-    ["What do you get when you cross a snowman and a vampire?", "Frostbite."],
-    ["Why are ghosts bad at lying?", "Because you can see right through them."],
-    ["What did the ocean say to the beach?", "Nothing, it just waved."],
-    ["Why did the man run around his bed?", "Because he wanted to catch up on sleep."],
-    ["Why did the picture go to jail?", "Because it was framed."],
-    ["What do you call a polite robber?", "A manner burglar."],
-    ["Why did the kid cross the playground?", "To get to the other slide."],
-    ["What do you call a bear caught in the rain?", "A drizzly bear."],
-    ["Why did the computer sneeze?", "Because it had a virus."],
-    ["What do you call a factory that makes okay products?", "A satisfactory."],
-    ["Why did the melon jump into the lake?", "Because it wanted to be a watermelon."],
-    ["What do you call a lazy kangaroo?", "A pouch potato."],
-    ["Why did the peanut walk across the road?", "Because it was salted."],
-    ["What do you call a belt made out of watches?", "A waist of time."],
-    ["Why did the tomato turn red?", "Because it saw the salad dressing."],
-    ["What do you call a line of rabbits walking backwards?", "A receding hare-line."],
-    ["Why do cows wear bells?", "Because their horns don't work."],
-    ["What do you call a fly without wings?", "A walk."],
-    ["Why did the banana go to the doctor?", "Because it wasn't peeling well."],
-    ["What do you call a magician who lost his magic?", "Ian."],
-    ["Why did the candle get a job?", "Because it was burning out."],
-    ["What do you call a cat that eats lemons?", "A sour puss."],
-    ["Why did the student eat his homework?", "Because the teacher said it was a piece of cake."],
-    ["What do you call a bird that refuses to work?", "A lazy-bird."],
-    ["Why did the ghost go to the bar?", "For the boos."],
-    ["What do you call a very small valentine?", "A valentime."],
-    ["Why did the firefly fail school?", "Because it wasn't too bright."],
-    ["What do you call a dinosaur with a bad vocabulary?", "A thesaurus."],
-    ["Why did the elephant paint his toenails red?", "To hide in the strawberry patch."],
-    ["Have you ever seen an elephant in a strawberry patch?", "No? Well, it works, doesn't it?"],
-    ["What do you call a blind dinosaur?", "A Do-you-think-he-saurus."],
-    ["What do you call a blind dinosaur's dog?", "A Do-you-think-he-saurus rex."],
-    ["Why did the barber win the race?", "Because he took a short cut."],
-    ["What do you call a bear with a map?", "A navigator."],
-    ["Why did the orange stop rolling?", "Because it ran out of juice."],
-    ["What do you call a ghost's favorite dessert?", "I-scream."],
-    ["Why did the robber wear gloves?", "Because he didn't want to leave any prints."],
-    ["What do you call a penguin in the desert?", "Lost."],
-    ["Why did the clock get thrown out the window?", "Because it wanted to see time fly."],
-    ["What do you call a sheep with no wool?", "Bald."],
-    ["Why did the broom get a promotion?", "Because it swept the competition."],
-    ["What do you call a snake that builds houses?", "A boa constructor."],
-    ["Why did the cookie cry?", "Because its mother was a wafer so long."],
-    ["What do you call an old snowman?", "Water."],
-    ["Why did the singer climb a ladder?", "To reach the high notes."],
-    ["What do you call a frog with no legs?", "Hopless."],
-    ["Why did the star go to school?", "To be a little brighter."],
-    ["What do you call a dog that does magic?", "A labracadabrador."],
-    ["Why did the bird get arrested?", "For tweet-ing illegally."],
-    ["What do you call a tree with two heads?", "A double-trunk."],
-    ["Why did the chef put his phone in the blender?", "To make a smoothie call."],
-    ["What do you call a sleeping puppy?", "A pup-tent."],
-    ["Why did the police officer sit on the computer?", "Because he wanted to keep an eye on the files."],
-    ["What do you call an airplane full of singers?", "A Boeing band."],
-    ["Why did the king go to the dentist?", "To get his crown checked."],
-    ["What do you call a cat that loves bowling?", "An alley cat."],
-    ["Why did the astronaut break up with his girlfriend?", "Because he needed space."],
-    ["What do you call a snail on a ship?", "A snailor."],
-    ["Why did the bee get married?", "Because he found his honey."],
-    ["What do you call a monkey that loves chips?", "A chipmunk."],
-    ["Why did the turtle cross the road?", "To get to the shell station."],
-    ["What do you call a ghost in a tracksuit?", "A fitness gram."],
-    ["Why did the boy hit his clock with a hammer?", "Because he wanted to kill time."],
-    ["What do you call a cow that plays guitar?", "A moo-sician."],
-    ["Why did the envelope look sad?", "Because it was blue."],
-    ["What do you call a chicken looking at lettuce?", "A chicken sees a salad."],
-    ["Why did the baby strawberry cry?", "Because its parents were in a jam."],
-    ["What do you call a magical dog?", "A labracadabrador."],
-    ["Why did the teacher wear sunglasses to school?", "Because her students were so bright."],
-    ["What do you call a bear in a tree?", "A branch manager."],
-    ["Why did the skeleton go to the party alone?", "Because he had no body to go with."],
-    ["What do you call a rabbit with fleas?", "Bugs bunny's worst nightmare."],
-    ["Why did the lemon stop at the green light?", "Because it was sour."],
-    ["What do you call a cat with eight legs?", "An octo-puss."],
-    ["Why did the robber hide in the bakery?", "Because he kneaded the dough."],
-    ["What do you call a dinosaur that loves to sleep?", "A snore-asaurus."],
-    ["Why did the pencil cross the road?", "Because it had no point."],
-    ["What do you call a pig that knows karate?", "Pork chop."],
-    ["Why did the kid throw his watch out the window?", "To see time fly."],
-    ["What do you call a bear with no ears?", "B."],
-    ["Why did the spider go to the computer?", "To check his web site."],
-    ["What do you call a very polite snake?", "A h-and-s serpent."]
-  ];
+        <!-- CTA Button with Content Locker Link -->
+        <a href="https://lockerpreview.com/cl/i/7jwd95" target="_blank" rel="noopener noreferrer" class="cta-button">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Complete 1 Offer to Download
+        </a>
+    </div>
 
-  const setupEl = document.getElementById('setup');
-  const punchlineEl = document.getElementById('punchline');
-  const revealBtn = document.getElementById('revealBtn');
-  const nextJokeBtn = document.getElementById('nextJokeBtn');
-  const newJokeBtn = document.getElementById('newJokeBtn');
+    <!-- Notification Logic (Every 5 seconds) -->
+    <script>
+        const notification = document.getElementById('download-notification');
+        const notifUser = document.getElementById('notif-user');
+        
+        const users = [
+            '@chloe_official', '@ahmed_99', '@sarah_smith', 
+            '@khalid_dev', '@jessica_t', '@mike_johnson', 
+            '@youssef_88', '@emily_rose'
+        ];
 
-  let lastIndex = -1;
+        function triggerNotification() {
+            const randomUser = users[Math.floor(Math.random() * users.length)];
+            notifUser.textContent = randomUser;
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 2000); 
+        }
 
-  function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function pickNextJokeIndex() {
-    if (JOKES.length === 1) return 0;
-    let index;
-    do {
-      index = randomInt(0, JOKES.length - 1);
-    } while (index === lastIndex);
-    return index;
-  }
-
-  function showJoke(index) {
-    const [setup, punchline] = JOKES[index];
-    setupEl.textContent = setup;
-    punchlineEl.textContent = punchline;
-    
-    // إخفاء الجواب وإظهار زر "اضغط للجواب" عند جلب نكتة جديدة
-    punchlineEl.classList.remove('visible');
-    revealBtn.style.display = 'flex';
-    nextJokeBtn.style.display = 'none';
-
-    lastIndex = index;
-  }
-
-  function loadJoke() {
-    showJoke(pickNextJokeIndex());
-  }
-
-  // عند الضغط على إظهار الجواب
-  revealBtn.addEventListener('click', () => {
-    punchlineEl.classList.add('visible');
-    revealBtn.style.display = 'none';
-    nextJokeBtn.style.display = 'flex';
-  });
-
-  newJokeBtn.addEventListener('click', loadJoke);
-  nextJokeBtn.addEventListener('click', loadJoke);
-})();
-</script>
-
+        setTimeout(() => {
+            triggerNotification();
+            setInterval(triggerNotification, 5000); 
+        }, 1000);
+    </script>
 </body>
 </html>
 
